@@ -11,6 +11,18 @@
   width: 100%;
 }
 
+.Slider > ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition-timing-function: ease-in-out;
+  transition-property: transform;
+}
+
+.Slide {
+  float: left;
+}
+
 .Arrow {
   position: absolute;
   top: 50%;

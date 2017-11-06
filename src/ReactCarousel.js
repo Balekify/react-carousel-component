@@ -15,8 +15,9 @@ export default class App extends React.Component {
     const slideToShow = this.props.slideToShow || option.slideToShow
     const slideWidth = nbrSlides * slideToShow
     const gutter = slideToShow === 1 ? 0 : (this.props.gutter || option.gutter) / 100 * slideWidth * 100 / carouselWidth
+    const transitionDuration = this.props.transitionDuration || option.transitionDuration
 
-    this.state = { slideWidth, carouselWidth, gutter, slideToScroll, currentSlide: initialSlide, slideToShow, children, nbrSlides }
+    this.state = { slideWidth, carouselWidth, gutter, slideToScroll, currentSlide: initialSlide, slideToShow, children, nbrSlides, transitionDuration }
 
     this.handleClickPrev = this.handleClickPrev.bind(this)
     this.handleClickNext = this.handleClickNext.bind(this)
@@ -66,22 +67,18 @@ export default class App extends React.Component {
   }
 
   render () {
-    const { currentSlide, slideWidth, slideToShow, carouselWidth, gutter, children, nbrSlides } = this.state
+    const { currentSlide, slideWidth, slideToShow, carouselWidth, gutter, children, nbrSlides, transitionDuration } = this.state
 
     const tile = 100 / slideWidth
     const tileWidth = tile - gutter + gutter / slideToShow
 
     const CarouselStyle = {
-      listStyle: 'none',
-      margin: 0,
-      padding: 0,
-      transition: 'transform .3s ease-in-out',
+      transitionDuration: `${transitionDuration}ms`,
       width: `${carouselWidth}%`,
       transform: `translateX(-${(tile + gutter / slideToShow) * currentSlide}%)`
     }
 
     const SlideStyle = {
-      float: 'left',
       width: `${tileWidth}%`,
       marginRight: `${gutter}%`
     }
