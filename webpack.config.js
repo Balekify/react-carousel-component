@@ -6,6 +6,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const StyleLintPlugin = require('stylelint-webpack-plugin')
 
 module.exports = {
+  resolve: {
+    extensions: ['.jsx', '.js', '.json']
+  },
+
   entry: ['./examples/index.js'],
 
   output: {
