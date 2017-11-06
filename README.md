@@ -1,6 +1,6 @@
 # React-carousel-component
 
-> Carouel component for react
+> Carousel component for react
 
 ## Usage
 ```js
