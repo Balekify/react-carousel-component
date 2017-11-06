@@ -1,0 +1,54 @@
+.Carousel {
+  position: relative;
+  width: 1000px;
+  max-width: 80%;
+  margin: auto;
+}
+
+.Slider {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.Arrow {
+  position: absolute;
+  top: 50%;
+  width: 2em;
+  height: 2em;
+  border: 1px solid silver;
+  border-radius: 50%;
+  background-color: #fff;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.Arrow::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1em;
+  height: 1em;
+  transform: translate(-50%, -50%);
+  color: silver;
+}
+
+.Arrow--disable {
+  display: none;
+}
+
+.Arrow--right {
+  right: -2.5em;
+}
+
+.Arrow--right::after {
+  content: '>';
+}
+
+.Arrow--left {
+  left: -2.5em;
+}
+
+.Arrow--left::after {
+  content: '<';
+}

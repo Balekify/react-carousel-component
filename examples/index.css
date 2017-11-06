@@ -1,0 +1,21 @@
+.Carousel {
+  padding: 3px;
+  border: 3px solid;
+  border-radius: 3px;
+  font-size: 5em;
+}
+
+.Slide:nth-child(odd) {
+  background: royalblue;
+}
+
+.Slide:nth-child(even) {
+  background: orangered;
+}
+
+.Item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 350px;
+}
