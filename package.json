@@ -1,8 +1,8 @@
 {
-  "name": "react-carousel-es6",
+  "name": "react-carousel-component",
   "version": "0.1.0",
   "main": "./lib/ReactCarousel.js",
-  "repository": "git@github.com:OthersWays/react-carousel-es6.git",
+  "repository": "git@github.com:OthersWays/react-carousel-component.git",
   "author": "TokaLazy <cl.steeve@gmail.com>",
   "description": "Carouel component for react",
   "license": "MIT",
