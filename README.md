@@ -9,7 +9,8 @@ class Exemple extends React.Component {
     const items = [1, 2, 3, 4, 5]
 
     const settings = {
-      currentSlide: 3
+      currentSlide: 3,
+      onNext: _ => console.log('Next arrow clicked')
     }
 
     return (
@@ -28,3 +29,6 @@ class Exemple extends React.Component {
 | slideToShow | Number | `2` | Number of slides to be shown |
 | slideToScroll | Number | `1` | Number of slides to scroll on slide |
 | gutter | Number | `0` | Percentage of space between slides |
+| onSlide | Function | `null` | Function called on click of both arrows |
+| onPrev | Function | `null` | Function called on click of left arrow |
+| onNext | Function | `null` | Function called on click of right arrow |

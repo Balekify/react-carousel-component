@@ -1,6 +1,6 @@
 {
   "name": "react-carousel-component",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "./lib/ReactCarousel.js",
   "repository": "git@github.com:OthersWays/react-carousel-component.git",
   "author": "TokaLazy <cl.steeve@gmail.com>",

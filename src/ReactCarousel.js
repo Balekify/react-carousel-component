@@ -27,6 +27,9 @@ export default class App extends React.Component {
       const currentSlide = prev.currentSlide - prev.slideToScroll < 0 ? 0 : prev.currentSlide - prev.slideToScroll
       return { currentSlide }
     })
+
+    this.onSlide()
+    this.onPrev()
   }
 
   handleClickNext () {
@@ -39,6 +42,27 @@ export default class App extends React.Component {
 
       return { currentSlide }
     })
+
+    this.onSlide()
+    this.onNext()
+  }
+
+  onSlide () {
+    if (typeof this.props.onSlide === 'function') {
+      this.props.onSlide.apply()
+    }
+  }
+
+  onPrev () {
+    if (typeof this.props.onPrev === 'function') {
+      this.props.onPrev.apply()
+    }
+  }
+
+  onNext () {
+    if (typeof this.props.onNext === 'function') {
+      this.props.onNext.apply()
+    }
   }
 
   render () {
