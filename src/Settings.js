@@ -3,5 +3,6 @@ export default {
   slideToShow: 1,
   slideToScroll: 1,
   gutter: 0,
-  transitionDuration: 300
+  transitionDuration: 500,
+  hideDots: false
 }

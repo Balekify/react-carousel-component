@@ -1,6 +1,7 @@
 import React from 'react'
 import option from './Settings'
 import Arrow from './ReactArrow'
+import Dots from './ReactDots'
 import './style.css'
 
 export default class App extends React.Component {
@@ -16,11 +17,22 @@ export default class App extends React.Component {
     const slideWidth = nbrSlides * slideToShow
     const gutter = slideToShow === 1 ? 0 : (this.props.gutter || option.gutter) / 100 * slideWidth * 100 / carouselWidth
     const transitionDuration = this.props.transitionDuration || option.transitionDuration
+    const hideDots = this.props.hideDots || option.hideDots
 
-    this.state = { slideWidth, carouselWidth, gutter, slideToScroll, currentSlide: initialSlide, slideToShow, children, nbrSlides, transitionDuration }
+    this.state = { slideWidth, carouselWidth, gutter, slideToScroll, currentSlide: initialSlide, slideToShow, children, nbrSlides, transitionDuration, hideDots }
 
     this.handleClickPrev = this.handleClickPrev.bind(this)
     this.handleClickNext = this.handleClickNext.bind(this)
+    this.handleClickDot = this.handleClickDot.bind(this)
+  }
+
+  handleClickDot (nbr) {
+    this.setState(prev => {
+      if (nbr + prev.slideToShow >= prev.nbrSlides) {
+        nbr = prev.nbrSlides - prev.slideToShow
+      }
+      return { currentSlide: nbr }
+    })
   }
 
   handleClickPrev () {
@@ -67,7 +79,7 @@ export default class App extends React.Component {
   }
 
   render () {
-    const { currentSlide, slideWidth, slideToShow, carouselWidth, gutter, children, nbrSlides, transitionDuration } = this.state
+    const { currentSlide, slideWidth, slideToShow, carouselWidth, gutter, children, nbrSlides, transitionDuration, hideDots } = this.state
 
     const tile = 100 / slideWidth
     const tileWidth = tile - gutter + gutter / slideToShow
@@ -82,6 +94,14 @@ export default class App extends React.Component {
       width: `${tileWidth}%`,
       marginRight: `${gutter}%`
     }
+
+    const Dot = hideDots
+      ? null
+      : <Dots
+        nbrSlides={nbrSlides}
+        currentSlide={currentSlide}
+        handleClickDot={this.handleClickDot}
+      />
 
     return (
       <div className='Carousel'>
@@ -104,6 +124,7 @@ export default class App extends React.Component {
           handleClick={this.handleClickNext}
           fade={currentSlide + slideToShow >= nbrSlides}
         />
+        {Dot}
       </div>
     )
   }

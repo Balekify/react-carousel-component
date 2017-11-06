@@ -2,6 +2,9 @@
   padding: 3px;
   border: 3px solid;
   border-radius: 3px;
+}
+
+.Slider {
   font-size: 5em;
 }
 
@@ -17,5 +20,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 350px;
+  height: 50vh;
+  max-height: 200px;
 }
