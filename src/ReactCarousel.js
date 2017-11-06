@@ -7,14 +7,16 @@ export default class App extends React.Component {
   constructor (props) {
     super(props)
 
-    const currentSlide = this.props.currentSlide || option.currentSlide
-    const carouselWidth = 100 * this.props.children.length
+    const children = this.props.children
+    const nbrSlides = children.length
+    const initialSlide = this.props.initialSlide || option.initialSlide
+    const carouselWidth = 100 * nbrSlides
     const slideToScroll = this.props.slideToScroll || option.slideToScroll
     const slideToShow = this.props.slideToShow || option.slideToShow
-    const slideWidth = this.props.children.length * slideToShow
+    const slideWidth = nbrSlides * slideToShow
     const gutter = slideToShow === 1 ? 0 : (this.props.gutter || option.gutter) / 100 * slideWidth * 100 / carouselWidth
 
-    this.state = { slideWidth, carouselWidth, gutter, slideToScroll, currentSlide, slideToShow }
+    this.state = { slideWidth, carouselWidth, gutter, slideToScroll, currentSlide: initialSlide, slideToShow, children, nbrSlides }
 
     this.handleClickPrev = this.handleClickPrev.bind(this)
     this.handleClickNext = this.handleClickNext.bind(this)
@@ -29,13 +31,18 @@ export default class App extends React.Component {
 
   handleClickNext () {
     this.setState(prev => {
-      const currentSlide = prev.currentSlide + prev.slideToScroll < this.props.children.length ? prev.currentSlide + prev.slideToScroll : this.props.children.length - 1
+      let currentSlide = prev.currentSlide + prev.slideToScroll < prev.nbrSlides ? prev.currentSlide + prev.slideToScroll : prev.nbrSlides - 1
+
+      if (currentSlide + prev.slideToShow >= prev.nbrSlides) {
+        currentSlide = prev.nbrSlides - prev.slideToShow
+      }
+
       return { currentSlide }
     })
   }
 
   render () {
-    const { currentSlide, slideWidth, slideToShow, carouselWidth, gutter } = this.state
+    const { currentSlide, slideWidth, slideToShow, carouselWidth, gutter, children, nbrSlides } = this.state
 
     const tile = 100 / slideWidth
     const tileWidth = tile - gutter + gutter / slideToShow
@@ -60,12 +67,12 @@ export default class App extends React.Component {
         <Arrow
           position='left'
           handleClick={this.handleClickPrev}
-          fade={this.state.currentSlide === 0}
+          fade={!currentSlide}
         />
         <div className='Slider'>
           <ul style={CarouselStyle}>
             {
-              this.props.children.map((item, index) => (
+              children.map((item, index) => (
                 <li className='Slide' style={SlideStyle} key={index}>{item}</li>
               ))
             }
@@ -74,7 +81,7 @@ export default class App extends React.Component {
         <Arrow
           position='right'
           handleClick={this.handleClickNext}
-          fade={this.state.currentSlide + 1 === this.props.children.length}
+          fade={currentSlide + slideToShow >= nbrSlides}
         />
       </div>
     )
