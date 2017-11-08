@@ -49,19 +49,19 @@
   display: none;
 }
 
-.Arrow--right {
+.Arrow:last-of-type {
   right: -2.5em;
 }
 
-.Arrow--right::after {
+.Arrow:last-of-type::after {
   content: '>';
 }
 
-.Arrow--left {
+.Arrow:first-of-type {
   left: -2.5em;
 }
 
-.Arrow--left::after {
+.Arrow:first-of-type::after {
   content: '<';
 }
 

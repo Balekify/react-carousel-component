@@ -10,7 +10,7 @@ class Exemple extends React.Component {
 
     const settings = {
       currentSlide: 3,
-      onNext: _ => console.log('Next arrow clicked')
+      beforeNext: _ => console.log('Next arrow clicked')
     }
 
     return (
@@ -31,6 +31,9 @@ class Exemple extends React.Component {
 | hideDots | Boolean | `false` | Hide dots |
 | transitionDuration | Number | `500` | Milliseconds of transition animation |
 | gutter | Number | `0` | Percentage of space between slides |
-| onSlide | Function | `null` | Function called on click of both arrows |
-| onPrev | Function | `null` | Function called on click of left arrow |
-| onNext | Function | `null` | Function called on click of right arrow |
+| beforeSlide | Function | `null` | Function called on click of arrows before transition start |
+| afterSlide | Function | `null` | Function called on click of arrows after the end of transition |
+| beforePrev | Function | `null` | Function called on click of left arrow before transition start |
+| afterPrev | Function | `null` | Function called on click of left arrow after the end of transition |
+| beforeNext | Function | `null` | Function called on click of right arrow before transition start |
+| afterNext | Function | `null` | Function called on click of right arrow after the end of transition |

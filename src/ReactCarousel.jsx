@@ -1,4 +1,5 @@
 import React from 'react'
+import shortid from 'shortid'
 import option from './Settings'
 import Arrow from './ReactArrow'
 import Dots from './ReactDots'
@@ -8,18 +9,32 @@ export default class App extends React.Component {
   constructor (props) {
     super(props)
 
-    const children = this.props.children
+    const {
+      children,
+      slideToScroll = option.slideToScroll,
+      initialSlide = option.initialSlide,
+      slideToShow = option.slideToShow,
+      transitionDuration = option.transitionDuration,
+      hideDots = option.hideDots
+    } = this.props
+
     const nbrSlides = children.length
-    const initialSlide = this.props.initialSlide || option.initialSlide
     const carouselWidth = 100 * nbrSlides
-    const slideToScroll = this.props.slideToScroll || option.slideToScroll
-    const slideToShow = this.props.slideToShow || option.slideToShow
     const slideWidth = nbrSlides * slideToShow
     const gutter = slideToShow === 1 ? 0 : (this.props.gutter || option.gutter) / 100 * slideWidth * 100 / carouselWidth
-    const transitionDuration = this.props.transitionDuration || option.transitionDuration
-    const hideDots = this.props.hideDots || option.hideDots
 
-    this.state = { slideWidth, carouselWidth, gutter, slideToScroll, currentSlide: initialSlide, slideToShow, children, nbrSlides, transitionDuration, hideDots }
+    this.state = {
+      slideWidth,
+      carouselWidth,
+      gutter,
+      slideToScroll,
+      currentSlide: initialSlide,
+      slideToShow,
+      children,
+      nbrSlides,
+      transitionDuration,
+      hideDots
+    }
 
     this.handleClickPrev = this.handleClickPrev.bind(this)
     this.handleClickNext = this.handleClickNext.bind(this)
@@ -41,8 +56,10 @@ export default class App extends React.Component {
       return { currentSlide }
     })
 
-    this.onSlide()
-    this.onPrev()
+    this.beforePrev()
+    this.afterPrev()
+    this.beforeSlide()
+    this.afterSlide()
   }
 
   handleClickNext () {
@@ -56,25 +73,45 @@ export default class App extends React.Component {
       return { currentSlide }
     })
 
-    this.onSlide()
-    this.onNext()
+    this.beforeNext()
+    this.afterNext()
+    this.beforeSlide()
+    this.afterSlide()
   }
 
-  onSlide () {
-    if (typeof this.props.onSlide === 'function') {
-      this.props.onSlide.apply()
+  beforeSlide () {
+    if (typeof this.props.beforeSlide === 'function') {
+      this.props.beforeSlide()
     }
   }
 
-  onPrev () {
-    if (typeof this.props.onPrev === 'function') {
-      this.props.onPrev.apply()
+  afterSlide () {
+    if (typeof this.props.afterSlide === 'function') {
+      this.slideContainer.addEventListener('transitionend', this.props.afterSlide)
     }
   }
 
-  onNext () {
-    if (typeof this.props.onNext === 'function') {
-      this.props.onNext.apply()
+  beforePrev () {
+    if (typeof this.props.beforePrev === 'function') {
+      this.props.beforePrev()
+    }
+  }
+
+  afterPrev () {
+    if (typeof this.props.afterPrev === 'function') {
+      this.slideContainer.addEventListener('transitionend', this.props.afterPrev)
+    }
+  }
+
+  beforeNext () {
+    if (typeof this.props.beforeNext === 'function') {
+      this.props.beforeNext()
+    }
+  }
+
+  afterNext () {
+    if (typeof this.props.afterNext === 'function') {
+      this.slideContainer.addEventListener('transitionend', this.props.afterNext)
     }
   }
 
@@ -103,27 +140,26 @@ export default class App extends React.Component {
         handleClickDot={this.handleClickDot}
       />
 
+    const items = []
+    children.map((item, index) => (
+      items.push(<li className='Slide' style={SlideStyle} key={shortid.generate()}>{item}</li>)
+    ))
+
     return (
       <div className='Carousel'>
         <Arrow
-          position='left'
           handleClick={this.handleClickPrev}
           fade={!currentSlide}
         />
-        <div className='Slider'>
-          <ul style={CarouselStyle}>
-            {
-              children.map((item, index) => (
-                <li className='Slide' style={SlideStyle} key={index}>{item}</li>
-              ))
-            }
-          </ul>
-        </div>
         <Arrow
-          position='right'
           handleClick={this.handleClickNext}
           fade={currentSlide + slideToShow >= nbrSlides}
         />
+        <div className='Slider'>
+          <ul style={CarouselStyle} ref={el => { this.slideContainer = el }}>
+            {items}
+          </ul>
+        </div>
         {Dot}
       </div>
     )

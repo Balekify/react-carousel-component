@@ -1,4 +1,5 @@
 import React from 'react'
+import shortid from 'shortid'
 
 export default class Dots extends React.Component {
   constructor (props) {
@@ -17,7 +18,7 @@ export default class Dots extends React.Component {
 
     for (let i = 0; i < nbrSlides; i++) {
       items.push(
-        <li className={'Dot' + (i === currentSlide ? ' current' : '')} onClick={_ => this.handleClick(i)} key={i}>&nbsp;</li>
+        <li className={'Dot' + (i === currentSlide ? ' current' : '')} onClick={_ => this.handleClick(i)} key={shortid.generate()}>&nbsp;</li>
       )
     }
 
