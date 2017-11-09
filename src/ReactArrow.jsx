@@ -12,10 +12,10 @@ export default class Arrow extends React.Component {
   }
 
   render () {
-    const { position, fade } = this.props
+    const { fade } = this.props
 
     return (
-      <button className={`Arrow Arrow--${position} ${fade ? 'Arrow--disable' : ''}`} onClick={this.handleClick} />
+      <button className={`Arrow ${fade ? 'Arrow--disable' : ''}`} onClick={this.handleClick} />
     )
   }
 }
