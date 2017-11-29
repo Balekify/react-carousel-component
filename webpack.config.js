@@ -28,7 +28,6 @@ module.exports = {
       warnings: true,
       errors: true
     },
-    open: true
   },
 
   devtool: 'cheap-module-eval-source-map',

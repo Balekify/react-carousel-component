@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import ReactCarousel from 'react-carousel-es6'
+import ReactCarousel from '../src/ReactCarousel'
 import './index.css'
 
 class DemoCarousel extends Component {
@@ -26,4 +26,7 @@ class DemoCarousel extends Component {
   }
 }
 
-render(<DemoCarousel />, document.getElementById('app'))
+render(
+  <DemoCarousel />,
+  document.getElementById('app')
+)

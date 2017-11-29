@@ -11,34 +11,58 @@ export default class App extends React.Component {
 
     const {
       children,
-      slideToScroll = option.slideToScroll,
+      autoScroll = option.autoScroll,
+      timer = option.timer,
       initialSlide = option.initialSlide,
       slideToShow = option.slideToShow,
-      transitionDuration = option.transitionDuration,
+      slideToScroll = option.slideToScroll,
+      speed = option.speed,
       hideDots = option.hideDots
     } = this.props
+
+    this.state = {
+      children,
+      autoScroll,
+      timer,
+      currentSlide: initialSlide,
+      slideToShow,
+      slideToScroll,
+      gutter: null,
+      speed,
+      hideDots,
+      wait: false,
+      nbrSlides: null,
+      carouselWidth: null,
+      slideWidth: null
+    }
+
+    this.handleClickPrev = this.handleClickPrev.bind(this)
+    this.handleClickNext = this.handleClickNext.bind(this)
+    this.handleClickDot = this.handleClickDot.bind(this)
+  }
+
+  componentWillMount () {
+    const { children, slideToShow } = this.state
 
     const nbrSlides = children.length
     const carouselWidth = 100 * nbrSlides
     const slideWidth = nbrSlides * slideToShow
     const gutter = slideToShow === 1 ? 0 : (this.props.gutter || option.gutter) / 100 * slideWidth * 100 / carouselWidth
 
-    this.state = {
-      slideWidth,
-      carouselWidth,
+    this.setState({
       gutter,
-      slideToScroll,
-      currentSlide: initialSlide,
-      slideToShow,
-      children,
       nbrSlides,
-      transitionDuration,
-      hideDots
-    }
+      carouselWidth,
+      slideWidth
+    })
+  }
 
-    this.handleClickPrev = this.handleClickPrev.bind(this)
-    this.handleClickNext = this.handleClickNext.bind(this)
-    this.handleClickDot = this.handleClickDot.bind(this)
+  componentDidMount () {
+    const { autoScroll, timer } = this.state
+
+    if (autoScroll) {
+      setInterval(this.handleClickNext, timer)
+    }
   }
 
   handleClickDot (nbr) {
@@ -51,78 +75,83 @@ export default class App extends React.Component {
   }
 
   handleClickPrev () {
-    this.setState(prev => {
-      const currentSlide = prev.currentSlide - prev.slideToScroll < 0 ? 0 : prev.currentSlide - prev.slideToScroll
-      return { currentSlide }
-    })
+    if (!this.state.wait) {
+      this.setState(prev => {
+        const currentSlide = prev.currentSlide - prev.slideToScroll < 0 ? 0 : prev.currentSlide - prev.slideToScroll
 
-    this.beforePrev()
-    this.afterPrev()
-    this.beforeSlide()
-    this.afterSlide()
+        return { currentSlide }
+      })
+
+      this.prev()
+    }
   }
 
   handleClickNext () {
-    this.setState(prev => {
-      let currentSlide = prev.currentSlide + prev.slideToScroll < prev.nbrSlides ? prev.currentSlide + prev.slideToScroll : prev.nbrSlides - 1
+    if (!this.state.wait) {
+      this.setState(prev => {
+        let currentSlide = prev.currentSlide + prev.slideToScroll < prev.nbrSlides ? prev.currentSlide + prev.slideToScroll : prev.nbrSlides - 1
 
-      if (currentSlide + prev.slideToShow >= prev.nbrSlides) {
-        currentSlide = prev.nbrSlides - prev.slideToShow
+        if (currentSlide + prev.slideToShow >= prev.nbrSlides) {
+          currentSlide = prev.nbrSlides - prev.slideToShow
+        }
+
+        return { currentSlide }
+      })
+
+      this.next()
+    }
+  }
+
+  transition (before, after) {
+    this.setState({ wait: true })
+
+    const { beforeSlide, afterSlide } = this.props
+
+    const func = _ => {
+      this.setState({ wait: false })
+
+      if (typeof after === 'function') {
+        after()
       }
 
-      return { currentSlide }
-    })
+      if (typeof afterSlide === 'function') {
+        afterSlide()
+      }
 
-    this.beforeNext()
-    this.afterNext()
-    this.beforeSlide()
-    this.afterSlide()
+      this.slideContainer.removeEventListener('transitionend', func, false)
+    }
+
+    if (typeof beforeSlide === 'function') {
+      beforeSlide()
+    }
+
+    if (typeof before === 'function') {
+      before()
+    }
+
+    this.slideContainer.addEventListener('transitionend', func, false)
   }
 
-  beforeSlide () {
-    if (typeof this.props.beforeSlide === 'function') {
-      this.props.beforeSlide()
-    }
+  prev () {
+    const { beforePrev, afterPrev } = this.props
+
+    this.transition(beforePrev, afterPrev)
   }
 
-  afterSlide () {
-    if (typeof this.props.afterSlide === 'function') {
-      this.slideContainer.addEventListener('transitionend', this.props.afterSlide)
-    }
-  }
+  next () {
+    const { beforeNext, afterNext } = this.props
 
-  beforePrev () {
-    if (typeof this.props.beforePrev === 'function') {
-      this.props.beforePrev()
-    }
-  }
-
-  afterPrev () {
-    if (typeof this.props.afterPrev === 'function') {
-      this.slideContainer.addEventListener('transitionend', this.props.afterPrev)
-    }
-  }
-
-  beforeNext () {
-    if (typeof this.props.beforeNext === 'function') {
-      this.props.beforeNext()
-    }
-  }
-
-  afterNext () {
-    if (typeof this.props.afterNext === 'function') {
-      this.slideContainer.addEventListener('transitionend', this.props.afterNext)
-    }
+    this.transition(beforeNext, afterNext)
   }
 
   render () {
-    const { currentSlide, slideWidth, slideToShow, carouselWidth, gutter, children, nbrSlides, transitionDuration, hideDots } = this.state
+    const { currentSlide, slideWidth, slideToShow, carouselWidth, gutter, children, nbrSlides, speed, hideDots } = this.state
 
     const tile = 100 / slideWidth
     const tileWidth = tile - gutter + gutter / slideToShow
 
     const CarouselStyle = {
-      transitionDuration: `${transitionDuration}ms`,
+      transitionDuration: `${speed}ms`,
       width: `${carouselWidth}%`,
       transform: `translateX(-${(tile + gutter / slideToShow) * currentSlide}%)`
     }
@@ -141,7 +170,7 @@ export default class App extends React.Component {
       />
 
     const items = []
-    children.map((item, index) => (
+    children.map(item => (
       items.push(<li className='Slide' style={SlideStyle} key={shortid.generate()}>{item}</li>)
     ))
 
