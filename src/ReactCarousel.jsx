@@ -70,7 +70,6 @@ export default class App extends React.Component {
       if (nbr + prev.slideToShow >= prev.nbrSlides) {
         nbr = prev.nbrSlides - prev.slideToShow
       }
-
       return { currentSlide: nbr }
     })
   }

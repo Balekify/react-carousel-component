@@ -30,6 +30,8 @@ class Exemple extends React.Component {
 | initialSlide | Number | `0` | Default slide to show |
 | slideToShow | Number | `2` | Number of slides to be shown |
 | slideToScroll | Number | `1` | Number of slides to scroll on slide |
+| hideDots | Boolean | `false` | Hide dots |
+| transitionDuration | Number | `500` | Milliseconds of transition animation |
 | gutter | Number | `0` | Percentage of space between slides |
 | speed | Number | `500` | Milliseconds of transition animation |
 | hideDots | Boolean | `false` | Hide dots |

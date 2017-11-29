@@ -14,8 +14,8 @@ class DemoCarousel extends Component {
     const settings = {
       slideToShow: 3,
       gutter: 10,
-      afterPrev: _ => console.log('after prev'),
-      beforeNext: _ => console.log('before next')
+      beforeSlide: _ => console.log('avant'),
+      afterSlide: _ => console.log('après')
     }
 
     return (
